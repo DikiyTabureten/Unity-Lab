@@ -255,6 +255,10 @@ namespace SlimUI.ModernMenu{
 			playMenu.SetActive(false);
 			if(extrasMenu) extrasMenu.SetActive(true);
 			
+			// меню выезжает сверху: стартует на 1000 выше и едет на своё место
+			extrasMenu.transform.DOKill(true);
+			extrasMenu.GetComponent<RectTransform>().DOAnchorPosY(1000f, 1f).From(true);
+			
 			exitMenu.SetActive(false);
 		}
 

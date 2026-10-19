@@ -34,6 +34,18 @@ public class EnemySelector : MonoBehaviour
             .ForEach(Highlight);
     }
 
+    // Задание 2: летающие грибочки
+    public void PaintAirMushrooms()
+    {
+        ResetAll();
+        _entities
+            .Where(e => e.GetComponent<Mushrooms>())
+            .Where(e => e.Type == Entity.EntityType.Air)
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(Highlight);
+    }
+
     // Сбросить цвет у всех, чтобы подсветки не накладывались
     public void ResetAll()
     {

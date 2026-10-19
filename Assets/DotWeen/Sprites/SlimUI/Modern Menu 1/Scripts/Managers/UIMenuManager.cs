@@ -240,6 +240,12 @@ namespace SlimUI.ModernMenu{
 		// Are You Sure - Quit Panel Pop Up
 		public void AreYouSure(){
 			exitMenu.SetActive(true);
+
+			// меню делает полный круг вокруг себя по Z и останавливается
+			exitMenu.transform.DOKill(true);
+			exitMenu.transform.localEulerAngles = Vector3.zero;
+			exitMenu.transform.DOLocalRotate(new Vector3(0f, 0f, 360f), 1f, RotateMode.FastBeyond360);
+
 			if(extrasMenu) extrasMenu.SetActive(false);
 			DisablePlayCampaign();
 		}

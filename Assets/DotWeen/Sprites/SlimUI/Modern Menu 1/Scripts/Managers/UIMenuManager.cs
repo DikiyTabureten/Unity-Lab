@@ -195,6 +195,14 @@ namespace SlimUI.ModernMenu{
 			DisablePanels();
 			PanelVideo.SetActive(true);
 			lineVideo.SetActive(true);
+
+			// панель раскручивается из точки, а в конце упруго «пружинит» масштабом
+			PanelVideo.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelVideo.transform.DOLocalRotate(new Vector3(0f, 0f, -180f), 0.6f).From().SetEase(Ease.OutCubic));
+			seq.Join(PanelVideo.transform.DOScale(Vector3.zero, 0.6f).From());
+			seq.Append(PanelVideo.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0f), 0.4f));
+			seq.SetTarget(PanelVideo.transform);
 		}
 
 		public void ControlsPanel(){

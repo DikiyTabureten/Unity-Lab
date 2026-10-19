@@ -216,6 +216,13 @@ namespace SlimUI.ModernMenu{
 			MovementPanel();
 			PanelKeyBindings.SetActive(true);
 			lineKeyBindings.SetActive(true);
+
+			// панель раскрывается по вертикали из линии, как экран старого телевизора, и вздрагивает
+			PanelKeyBindings.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelKeyBindings.transform.DOScale(new Vector3(1f, 0f, 1f), 0.5f).From().SetEase(Ease.OutExpo));
+			seq.Append(PanelKeyBindings.GetComponent<RectTransform>().DOShakeAnchorPos(0.4f, 15f));
+			seq.SetTarget(PanelKeyBindings.transform);
 		}
 
 		public void MovementPanel(){

@@ -46,6 +46,17 @@ public class EnemySelector : MonoBehaviour
             .ForEach(Highlight);
     }
 
+    // Задание 3: первый враг в массиве
+    public void PaintFirst()
+    {
+        ResetAll();
+        var e = _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .FirstOrDefault();
+        if (e)
+            Highlight(e.GetComponent<SpriteRenderer>());
+    }
+
     // Сбросить цвет у всех, чтобы подсветки не накладывались
     public void ResetAll()
     {

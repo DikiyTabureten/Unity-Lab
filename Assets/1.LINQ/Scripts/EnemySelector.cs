@@ -57,6 +57,20 @@ public class EnemySelector : MonoBehaviour
             Highlight(e.GetComponent<SpriteRenderer>());
     }
 
+    // Задание 4: враги по здоровью от большего к меньшему
+    public void SortByHealth()
+    {
+        Debug.Log("--- Враги по здоровью ---");
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .OrderBy(e => e.health)
+            .Reverse()
+            .ToList()
+            .ForEach(LogHealth);
+    }
+
+    public void LogHealth(Entity entity) => Debug.Log(entity.name + ": " + entity.health);
+
     // Сбросить цвет у всех, чтобы подсветки не накладывались
     public void ResetAll()
     {

@@ -71,6 +71,20 @@ public class EnemySelector : MonoBehaviour
 
     public void LogHealth(Entity entity) => Debug.Log(entity.name + ": " + entity.health);
 
+    // Задание 5: враги по типу (Ground, Air), внутри типа по здоровью
+    public void SortByTypeAndHealth()
+    {
+        Debug.Log("--- Враги по типу и здоровью ---");
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .OrderBy(e => e.Type)
+            .ThenBy(e => e.health)
+            .ToList()
+            .ForEach(LogTypeHealth);
+    }
+
+    public void LogTypeHealth(Entity entity) => Debug.Log(entity.name + " (" + entity.Type + "): " + entity.health);
+
     // Сбросить цвет у всех, чтобы подсветки не накладывались
     public void ResetAll()
     {

@@ -14,7 +14,10 @@ public class EnemySelector : MonoBehaviour
 
     public void PaintAll()
     {
-  
+        _entities
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(PaintRed);
     }
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using Unity.VisualScripting;
@@ -20,6 +21,42 @@ public class EnemySelector : MonoBehaviour
             .ForEach(PaintRed);
     }
 
+    // Задание 1: летающие враги, у которых HP больше 50
+    public void PaintAirStrong()
+    {
+        ResetAll();
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .Where(e => e.Type == Entity.EntityType.Air)
+            .Where(e => e.health > 50)
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(Highlight);
+    }
+
+    // Сбросить цвет у всех, чтобы подсветки не накладывались
+    public void ResetAll()
+    {
+        StopAllCoroutines();
+        _entities
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(ResetColor);
+    }
+
+    // Выделить спрайт на 3 секунды
+    public void Highlight(SpriteRenderer spriteRenderer)
+    {
+        StartCoroutine(Flash(spriteRenderer));
+    }
+
+    private IEnumerator Flash(SpriteRenderer spriteRenderer)
+    {
+        PaintRed(spriteRenderer);
+        yield return new WaitForSeconds(3f);
+
+        ResetColor(spriteRenderer);
+    }
 
     public void PaintRed(SpriteRenderer spriteRenderer)
     {

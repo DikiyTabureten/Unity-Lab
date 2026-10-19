@@ -182,6 +182,13 @@ namespace SlimUI.ModernMenu{
 			DisablePanels();
 			PanelGame.SetActive(true);
 			lineGame.SetActive(true);
+
+			// панель влетает слева с перелётом и одновременно расправляется из узкой полосы
+			PanelGame.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelGame.GetComponent<RectTransform>().DOAnchorPosX(-1500f, 0.7f).From(true).SetEase(Ease.OutBack));
+			seq.Join(PanelGame.transform.DOScale(new Vector3(0.2f, 1f, 1f), 0.7f).From());
+			seq.SetTarget(PanelGame.transform);
 		}
 
 		public void VideoPanel(){

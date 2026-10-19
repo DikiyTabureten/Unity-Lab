@@ -195,6 +195,13 @@ namespace SlimUI.ModernMenu{
 			PanelControls.SetActive(true);
 			lineControls.SetActive(true);
 
+			// панель вылетает «из камеры» (большая), проскакивает дальше (меньше нормы) и возвращается
+			PanelControls.transform.DOKill(true);
+			PanelControls.transform.localScale = new Vector3(3f, 3f, 3f);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelControls.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.6f));
+			seq.Append(PanelControls.transform.DOScale(new Vector3(1f, 1f, 1f), 0.4f));
+			seq.SetTarget(PanelControls.transform);
 		}
 
 		public void KeyBindingsPanel(){

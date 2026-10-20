@@ -1269,8 +1269,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 10
-        minScalar: 10
+        scalar: 40
+        minScalar: 40
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -21259,8 +21259,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 2
-        minScalar: 2
+        scalar: 1
+        minScalar: 1
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -21309,7 +21309,7 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 5
+      cycleCount: 3
       repeatInterval: 0.2
       probability: 1
   SizeModule:

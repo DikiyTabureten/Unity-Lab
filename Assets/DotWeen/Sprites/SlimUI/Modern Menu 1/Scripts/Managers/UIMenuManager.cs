@@ -182,12 +182,27 @@ namespace SlimUI.ModernMenu{
 			DisablePanels();
 			PanelGame.SetActive(true);
 			lineGame.SetActive(true);
+
+			// панель влетает слева с перелётом и одновременно расправляется из узкой полосы
+			PanelGame.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelGame.GetComponent<RectTransform>().DOAnchorPosX(-1500f, 0.7f).From(true).SetEase(Ease.OutBack));
+			seq.Join(PanelGame.transform.DOScale(new Vector3(0.2f, 1f, 1f), 0.7f).From());
+			seq.SetTarget(PanelGame.transform);
 		}
 
 		public void VideoPanel(){
 			DisablePanels();
 			PanelVideo.SetActive(true);
 			lineVideo.SetActive(true);
+
+			// панель раскручивается из точки, а в конце упруго «пружинит» масштабом
+			PanelVideo.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelVideo.transform.DOLocalRotate(new Vector3(0f, 0f, -180f), 0.6f).From().SetEase(Ease.OutCubic));
+			seq.Join(PanelVideo.transform.DOScale(Vector3.zero, 0.6f).From());
+			seq.Append(PanelVideo.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0f), 0.4f));
+			seq.SetTarget(PanelVideo.transform);
 		}
 
 		public void ControlsPanel(){
@@ -195,6 +210,13 @@ namespace SlimUI.ModernMenu{
 			PanelControls.SetActive(true);
 			lineControls.SetActive(true);
 
+			// панель вылетает «из камеры» (большая), проскакивает дальше (меньше нормы) и возвращается
+			PanelControls.transform.DOKill(true);
+			PanelControls.transform.localScale = new Vector3(3f, 3f, 3f);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelControls.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.6f));
+			seq.Append(PanelControls.transform.DOScale(new Vector3(1f, 1f, 1f), 0.4f));
+			seq.SetTarget(PanelControls.transform);
 		}
 
 		public void KeyBindingsPanel(){
@@ -202,6 +224,13 @@ namespace SlimUI.ModernMenu{
 			MovementPanel();
 			PanelKeyBindings.SetActive(true);
 			lineKeyBindings.SetActive(true);
+
+			// панель раскрывается по вертикали из линии, как экран старого телевизора, и вздрагивает
+			PanelKeyBindings.transform.DOKill(true);
+			Sequence seq = DOTween.Sequence();
+			seq.Append(PanelKeyBindings.transform.DOScale(new Vector3(1f, 0f, 1f), 0.5f).From().SetEase(Ease.OutExpo));
+			seq.Append(PanelKeyBindings.GetComponent<RectTransform>().DOShakeAnchorPos(0.4f, 15f));
+			seq.SetTarget(PanelKeyBindings.transform);
 		}
 
 		public void MovementPanel(){
@@ -240,6 +269,12 @@ namespace SlimUI.ModernMenu{
 		// Are You Sure - Quit Panel Pop Up
 		public void AreYouSure(){
 			exitMenu.SetActive(true);
+
+			// меню делает полный круг вокруг себя по Z и останавливается
+			exitMenu.transform.DOKill(true);
+			exitMenu.transform.localEulerAngles = Vector3.zero;
+			exitMenu.transform.DOLocalRotate(new Vector3(0f, 0f, 360f), 1f, RotateMode.FastBeyond360);
+
 			if(extrasMenu) extrasMenu.SetActive(false);
 			DisablePlayCampaign();
 		}
@@ -254,6 +289,10 @@ namespace SlimUI.ModernMenu{
 		public void ExtrasMenu(){
 			playMenu.SetActive(false);
 			if(extrasMenu) extrasMenu.SetActive(true);
+			
+			// меню выезжает сверху: стартует на 1000 выше и едет на своё место
+			extrasMenu.transform.DOKill(true);
+			extrasMenu.GetComponent<RectTransform>().DOAnchorPosY(1000f, 1f).From(true);
 			
 			exitMenu.SetActive(false);
 		}

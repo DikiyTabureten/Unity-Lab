@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using Unity.VisualScripting;
@@ -14,9 +15,99 @@ public class EnemySelector : MonoBehaviour
 
     public void PaintAll()
     {
-  
+        _entities
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(PaintRed);
     }
 
+    // Задание 1: летающие враги, у которых HP больше 50
+    public void PaintAirStrong()
+    {
+        ResetAll();
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .Where(e => e.Type == Entity.EntityType.Air)
+            .Where(e => e.health > 50)
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(Highlight);
+    }
+
+    // Задание 2: летающие грибочки
+    public void PaintAirMushrooms()
+    {
+        ResetAll();
+        _entities
+            .Where(e => e.GetComponent<Mushrooms>())
+            .Where(e => e.Type == Entity.EntityType.Air)
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(Highlight);
+    }
+
+    // Задание 3: первый враг в массиве
+    public void PaintFirst()
+    {
+        ResetAll();
+        var e = _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .FirstOrDefault();
+        if (e)
+            Highlight(e.GetComponent<SpriteRenderer>());
+    }
+
+    // Задание 4: враги по здоровью от большего к меньшему
+    public void SortByHealth()
+    {
+        Debug.Log("--- Враги по здоровью ---");
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .OrderBy(e => e.health)
+            .Reverse()
+            .ToList()
+            .ForEach(LogHealth);
+    }
+
+    public void LogHealth(Entity entity) => Debug.Log(entity.name + ": " + entity.health);
+
+    // Задание 5: враги по типу (Ground, Air), внутри типа по здоровью
+    public void SortByTypeAndHealth()
+    {
+        Debug.Log("--- Враги по типу и здоровью ---");
+        _entities
+            .Where(e => e.GetComponent<Enemy>())
+            .OrderBy(e => e.Type)
+            .ThenBy(e => e.health)
+            .ToList()
+            .ForEach(LogTypeHealth);
+    }
+
+    public void LogTypeHealth(Entity entity) => Debug.Log(entity.name + " (" + entity.Type + "): " + entity.health);
+
+    // Сбросить цвет у всех, чтобы подсветки не накладывались
+    public void ResetAll()
+    {
+        StopAllCoroutines();
+        _entities
+            .Select(e => e.GetComponent<SpriteRenderer>())
+            .ToList()
+            .ForEach(ResetColor);
+    }
+
+    // Выделить спрайт на 3 секунды
+    public void Highlight(SpriteRenderer spriteRenderer)
+    {
+        StartCoroutine(Flash(spriteRenderer));
+    }
+
+    private IEnumerator Flash(SpriteRenderer spriteRenderer)
+    {
+        PaintRed(spriteRenderer);
+        yield return new WaitForSeconds(3f);
+
+        ResetColor(spriteRenderer);
+    }
 
     public void PaintRed(SpriteRenderer spriteRenderer)
     {
